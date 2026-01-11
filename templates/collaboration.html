@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaboration - ForensicRecon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-fingerprint"></i>
+                <span>Forensic<span class="highlight">Recon</span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/upload"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+                <li><a href="/evidence"><i class="fas fa-clipboard-list"></i> Evidence</a></li>
+                <li><a href="/reconstruction"><i class="fas fa-robot"></i> AI Analysis</a></li>
+                <li><a href="/visualization"><i class="fas fa-vr-cardboard"></i> Visualization</a></li>
+                <li><a href="/collaboration" class="active"><i class="fas fa-users"></i> Collaboration</a></li>
+                <li><a href="/security"><i class="fas fa-shield-alt"></i> Security</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Det. Sarah Miller</span>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="collaboration">
+        <div class="container">
+            <div class="collaboration-header">
+                <h1><i class="fas fa-users"></i> Collaborative Forensic Workflow</h1>
+                <p class="section-subtitle">Team-based investigation platform with real-time collaboration and role-based access control</p>
+            </div>
+
+            <!-- Team Overview -->
+            <div class="section">
+                <h2><i class="fas fa-user-friends"></i> Investigation Team</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar primary">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="member-info">
+                            <h3>Det. Sarah Miller</h3>
+                            <p class="member-role">Lead Investigator</p>
+                            <p class="member-status"><i class="fas fa-circle online"></i> Online</p>
+                        </div>
+                        <div class="member-actions">
+                            <button class="btn btn-sm btn-outline" onclick="messageMember('sarah')">
+                                <i class="fas fa-comment"></i> Message
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div class="member-info">
+                            <h3>Dr. Alex Chen</h3>
+                            <p class="member-role">Forensic Analyst</p>
+                            <p class="member-status"><i class="fas fa-circle online"></i> Online</p>
+                        </div>
+                        <div class="member-actions">
+                            <button class="btn btn-sm btn-outline" onclick="messageMember('alex')">
+                                <i class="fas fa-comment"></i> Message
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="member-info">
+                            <h3>Tech Sgt. Rodriguez</h3>
+                            <p class="member-role">Digital Forensics</p>
+                            <p class="member-status"><i class="fas fa-circle away"></i> Away</p>
+                        </div>
+                        <div class="member-actions">
+                            <button class="btn btn-sm btn-outline" onclick="messageMember('rodriguez')">
+                                <i class="fas fa-comment"></i> Message
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="member-info">
+                            <h3>ADA James Wilson</h3>
+                            <p class="member-role">Legal Advisor</p>
+                            <p class="member-status"><i class="fas fa-circle offline"></i> Offline</p>
+                        </div>
+                        <div class="member-actions">
+                            <button class="btn btn-sm btn-outline" onclick="messageMember('james')">
+                                <i class="fas fa-comment"></i> Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-actions">
+                    <button class="btn btn-primary" onclick="inviteMember()">
+                        <i class="fas fa-user-plus"></i> Invite Team Member
+                    </button>
+                    <button class="btn btn-outline" onclick="scheduleMeeting()">
+                        <i class="fas fa-video"></i> Schedule Video Conference
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="section">
+                <h2><i class="fas fa-history"></i> Collaboration Activity Log</h2>
+                <div class="activity-log">
+                    {% for log in collaboration_logs %}
+                    <div class="log-entry">
+                        <div class="log-icon">
+                            <i class="fas fa-{{ 'upload' if 'upload' in log.action|lower else 'robot' if 'analysis' in log.action|lower else 'comment' if 'message' in log.action|lower else 'user-check' }}"></i>
+                        </div>
+                        <div class="log-content">
+                            <div class="log-header">
+                                <h4>{{ log.user }}</h4>
+                                <span class="log-time">{{ log.timestamp }}</span>
+                            </div>
+                            <p class="log-action">{{ log.action }}</p>
+                            <p class="log-details">{{ log.details }}</p>
+                            <span class="log-case">Case: {{ log.case_id }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="add-log">
+                    <h3><i class="fas fa-plus-circle"></i> Add New Activity</h3>
+                    <div class="add-log-form">
+                        <div class="form-group">
+                            <select id="logCase" class="form-select">
+                                <option value="">Select Case</option>
+                                {% for case in cases %}
+                                <option value="{{ case.id }}">{{ case.id }} - {{ case.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select id="logAction" class="form-select">
+                                <option value="">Select Action</option>
+                                <option value="Evidence Review">Evidence Review</option>
+                                <option value="Analysis Discussion">Analysis Discussion</option>
+                                <option value="Strategy Meeting">Strategy Meeting</option>
+                                <option value="Legal Consultation">Legal Consultation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="logDetails" placeholder="Enter details..." class="form-input">
+                        </div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">
+                            <i class="fas fa-save"></i> Add Log Entry
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case Discussions -->
+            <div class="section">
+                <h2><i class="fas fa-comments"></i> Case Discussions</h2>
+                <div class="discussions">
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <h3>Bank Robbery - Suspect Identification</h3>
+                            <span class="discussion-case">CASE-001</span>
+                        </div>
+                        <div class="discussion-messages">
+                            <div class="message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Det. Sarah Miller</span>
+                                        <span class="message-time">10:30 AM</span>
+                                    </div>
+                                    <p>AI analysis shows fingerprint match with John Doe. Need to verify alibi for March 15.</p>
+                                </div>
+                            </div>
+                            <div class="message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-microscope"></i>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Dr. Alex Chen</span>
+                                        <span class="message-time">10:45 AM</span>
+                                    </div>
+                                    <p>Confirmed fingerprint match with 94% confidence. Also found DNA evidence under nails.</p>
+                                </div>
+                            </div>
+                            <div class="message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-gavel"></i>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">ADA James Wilson</span>
+                                        <span class="message-time">11:15 AM</span>
+                                    </div>
+                                    <p>We have enough for a warrant. Preparing search warrant for suspect's residence.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="discussion-input">
+                            <input type="text" placeholder="Type your message..." id="discussionInput">
+                            <button class="btn btn-primary" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <h3>Art Gallery Theft - Security System Analysis</h3>
+                            <span class="discussion-case">CASE-002</span>
+                        </div>
+                        <div class="discussion-messages">
+                            <div class="message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Tech Sgt. Rodriguez</span>
+                                        <span class="message-time">Yesterday</span>
+                                    </div>
+                                    <p>Security system logs show intrusion at 2:15 AM. System was tampered with using admin credentials.</p>
+                                </div>
+                            </div>
+                            <div class="message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Det. Sarah Miller</span>
+                                        <span class="message-time">Yesterday</span>
+                                    </div>
+                                    <p>Need to interview gallery staff with system access. Also check for insider involvement.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="discussion-input">
+                            <input type="text" placeholder="Type your message..." id="discussionInput2">
+                            <button class="btn btn-primary" onclick="sendMessage2()">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shared Resources -->
+            <div class="section">
+                <h2><i class="fas fa-share-alt"></i> Shared Resources</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Forensic Analysis Report</h3>
+                            <p>CASE-001 comprehensive analysis</p>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user"></i> Dr. Alex Chen</span>
+                                <span><i class="fas fa-calendar"></i> March 20, 2024</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="btn btn-sm btn-outline" onclick="downloadResource('report')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="shareResource('report')">
+                                <i class="fas fa-share"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Surveillance Footage</h3>
+                            <p>Bank entrance camera footage</p>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user"></i> Det. Sarah Miller</span>
+                                <span><i class="fas fa-calendar"></i> March 19, 2024</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="btn btn-sm btn-outline" onclick="downloadResource('footage')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="shareResource('footage')">
+                                <i class="fas fa-share"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>3D Scene Reconstruction</h3>
+                            <p>Bank robbery scene visualization</p>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user"></i> Tech Sgt. Rodriguez</span>
+                                <span><i class="fas fa-calendar"></i> March 18, 2024</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="btn btn-sm btn-outline" onclick="downloadResource('scene')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="shareResource('scene')">
+                                <i class="fas fa-share"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Legal Brief</h3>
+                            <p>Search warrant application</p>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user"></i> ADA James Wilson</span>
+                                <span><i class="fas fa-calendar"></i> March 17, 2024</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="btn btn-sm btn-outline" onclick="downloadResource('brief')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="shareResource('brief')">
+                                <i class="fas fa-share"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 ForensicRecon System. For authorized law enforcement use only.</p>
+                <div class="footer-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Connection Encrypted</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function messageMember(member) {
+            alert(`Opening chat with ${member}`);
+        }
+
+        function inviteMember() {
+            const email = prompt("Enter email address to invite:");
+            if (email) {
+                alert(`Invitation sent to ${email}`);
+            }
+        }
+
+        function scheduleMeeting() {
+            alert("Opening meeting scheduler...");
+        }
+
+        function addLogEntry() {
+            const caseId = document.getElementById('logCase').value;
+            const action = document.getElementById('logAction').value;
+            const details = document.getElementById('logDetails').value;
+            
+            if (caseId && action && details) {
+                // In a real application, this would send data to the server
+                alert(`Log entry added: ${action} for ${caseId}`);
+                
+                // Clear form
+                document.getElementById('logCase').value = '';
+                document.getElementById('logAction').value = '';
+                document.getElementById('logDetails').value = '';
+            } else {
+                alert("Please fill in all fields");
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('discussionInput');
+            if (input.value.trim()) {
+                alert(`Message sent: ${input.value}`);
+                input.value = '';
+            }
+        }
+
+        function sendMessage2() {
+            const input = document.getElementById('discussionInput2');
+            if (input.value.trim()) {
+                alert(`Message sent: ${input.value}`);
+                input.value = '';
+            }
+        }
+
+        function downloadResource(resource) {
+            alert(`Downloading ${resource}...`);
+        }
+
+        function shareResource(resource) {
+            alert(`Sharing ${resource} with team...`);
+        }
+
+        // Simulate real-time updates
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate new message notifications
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <i class="fas fa-comment"></i>
+                    <span>New message from Dr. Alex Chen</span>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            }, 10000);
+        });
+    </script>
+</body>
+</html>

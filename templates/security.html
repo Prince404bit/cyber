@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security & Ethics - ForensicRecon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-fingerprint"></i>
+                <span>Forensic<span class="highlight">Recon</span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/upload"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+                <li><a href="/evidence"><i class="fas fa-clipboard-list"></i> Evidence</a></li>
+                <li><a href="/reconstruction"><i class="fas fa-robot"></i> AI Analysis</a></li>
+                <li><a href="/visualization"><i class="fas fa-vr-cardboard"></i> Visualization</a></li>
+                <li><a href="/collaboration"><i class="fas fa-users"></i> Collaboration</a></li>
+                <li><a href="/security" class="active"><i class="fas fa-shield-alt"></i> Security</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Det. Sarah Miller</span>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="security">
+        <div class="container">
+            <div class="security-header">
+                <h1><i class="fas fa-shield-alt"></i> Security & Ethical Framework</h1>
+                <p class="section-subtitle">Military-grade security protocols and ethical guidelines for forensic investigations</p>
+            </div>
+
+            <!-- Security Overview -->
+            <div class="section">
+                <h2><i class="fas fa-lock"></i> Security Overview</h2>
+                <div class="security-stats">
+                    <div class="security-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>256-bit Encryption</h3>
+                            <p>All data encrypted at rest and in transit</p>
+                        </div>
+                    </div>
+                    <div class="security-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Zero Trust Architecture</h3>
+                            <p>Continuous verification of all users and devices</p>
+                        </div>
+                    </div>
+                    <div class="security-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Complete Audit Trail</h3>
+                            <p>Every action logged with cryptographic integrity</p>
+                        </div>
+                    </div>
+                    <div class="security-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ISO 27001 Certified</h3>
+                            <p>International security standards compliance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Features -->
+            <div class="section">
+                <h2><i class="fas fa-cogs"></i> Security Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>End-to-End Encryption</h3>
+                        <p>All evidence, communications, and analysis results are encrypted with AES-256. Keys are managed through a secure HSM (Hardware Security Module).</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <h3>Multi-Factor Authentication</h3>
+                        <p>Biometric verification, hardware tokens, and one-time passwords required for all system access. Session timeout after 15 minutes of inactivity.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>Chain of Custody</h3>
+                        <p>Digital chain of custody tracking with blockchain-inspired integrity verification. Tamper-evident logs for all evidence handling.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-lock"></i>
+                        </div>
+                        <h3>Role-Based Access Control</h3>
+                        <p>Granular permissions based on investigation role. Least privilege principle enforced. All access attempts logged and monitored.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-virus-slash"></i>
+                        </div>
+                        <h3>Advanced Threat Protection</h3>
+                        <p>Real-time threat detection, intrusion prevention, and anomaly detection using AI-powered security monitoring.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-archive"></i>
+                        </div>
+                        <h3>Secure Data Retention</h3>
+                        <p>Automated backup with geo-redundancy. Retention policies compliant with legal requirements. Secure deletion with NIST standards.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ethical Framework -->
+            <div class="section">
+                <h2><i class="fas fa-balance-scale"></i> Ethical Framework</h2>
+                <div class="ethical-principles">
+                    <div class="principle">
+                        <div class="principle-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="principle-content">
+                            <h3>Privacy Protection</h3>
+                            <p>All investigations respect privacy rights. Data minimization principles applied. Personal information redacted when not relevant to investigation.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="principle-content">
+                            <h3>AI Ethics & Bias Mitigation</h3>
+                            <p>Regular audits for algorithmic bias. Transparent AI decision-making processes. Human oversight required for all critical determinations.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="principle-content">
+                            <h3>Legal Compliance</h3>
+                            <p>Adherence to all relevant laws including GDPR, CCPA, and local evidence handling regulations. Regular legal reviews of procedures.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="principle-content">
+                            <h3>Accountability</h3>
+                            <p>Clear responsibility assignment. Regular third-party audits. Whistleblower protection for ethical concerns.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="principle-content">
+                            <h3>Transparency</h3>
+                            <p>Documentation of all analysis methods. Explanation of AI recommendations. Disclosure of system limitations.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="principle-content">
+                            <h3>Fairness & Justice</h3>
+                            <p>Equal treatment under the law. Protection against wrongful accusations. Support for exoneration when evidence permits.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compliance Standards -->
+            <div class="section">
+                <h2><i class="fas fa-certificate"></i> Compliance & Standards</h2>
+                <div class="compliance-grid">
+                    <div class="compliance-card">
+                        <h3>ISO/IEC 27001</h3>
+                        <p>Information Security Management System</p>
+                        <div class="compliance-status">
+                            <i class="fas fa-check-circle certified"></i>
+                            <span>Certified</span>
+                        </div>
+                    </div>
+                    
+                    <div class="compliance-card">
+                        <h3>NIST CSF</h3>
+                        <p>Cybersecurity Framework</p>
+                        <div class="compliance-status">
+                            <i class="fas fa-check-circle certified"></i>
+                            <span>Compliant</span>
+                        </div>
+                    </div>
+                    
+                    <div class="compliance-card">
+                        <h3>GDPR</h3>
+                        <p>General Data Protection Regulation</p>
+                        <div class="compliance-status">
+                            <i class="fas fa-check-circle certified"></i>
+                            <span>Compliant</span>
+                        </div>
+                    </div>
+                    
+                    <div class="compliance-card">
+                        <h3>FIPS 140-2</h3>
+                        <p>Cryptographic Module Validation</p>
+                        <div class="compliance-status">
+                            <i class="fas fa-check-circle certified"></i>
+                            <span>Validated</span>
+                        </div>
+                    </div>
+                    
+                    <div class="compliance-card">
+                        <h3>ISO 17025</h3>
+                        <p>Forensic Laboratory Competence</p>
+                        <div class="compliance-status">
+                            <i class="fas fa-clock pending"></i>
+                            <span>In Progress</span>
+                        </div>
+                    </div>
+                    
+                    <div class="compliance-card">
+                        <h3>Chain of Custody</h3>
+                        <p>ASTM E2291 Standard</p>
+                        <div class="compliance-status">
+                            <i class="fas fa-check-circle certified"></i>
+                            <span>Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Log -->
+            <div class="section">
+                <h2><i class="fas fa-clipboard-list"></i> Security Audit Log</h2>
+                <div class="audit-log">
+                    <div class="audit-entry">
+                        <div class="audit-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="audit-content">
+                            <h4>System Security Scan</h4>
+                            <p>Complete system vulnerability scan completed. No critical issues found.</p>
+                            <span class="audit-time">March 20, 2024 14:30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="audit-entry">
+                        <div class="audit-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="audit-content">
+                            <h4>Encryption Key Rotation</h4>
+                            <p>Monthly encryption key rotation completed successfully.</p>
+                            <span class="audit-time">March 15, 2024 03:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="audit-entry">
+                        <div class="audit-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="audit-content">
+                            <h4>Failed Login Attempts</h4>
+                            <p>Multiple failed login attempts from IP 192.168.1.100. Account locked for 30 minutes.</p>
+                            <span class="audit-time">March 10, 2024 22:15</span>
+                        </div>
+                    </div>
+                    
+                    <div class="audit-entry">
+                        <div class="audit-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="audit-content">
+                            <h4>Third-Party Security Audit</h4>
+                            <p>External penetration testing completed. All findings addressed.</p>
+                            <span class="audit-time">March 5, 2024 10:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="audit-entry">
+                        <div class="audit-icon info">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="audit-content">
+                            <h4>Policy Update</h4>
+                            <p>Security policies updated to reflect new regulatory requirements.</p>
+                            <span class="audit-time">March 1, 2024 09:00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audit-actions">
+                    <button class="btn btn-primary" onclick="generateAuditReport()">
+                        <i class="fas fa-file-pdf"></i> Generate Audit Report
+                    </button>
+                    <button class="btn btn-outline" onclick="runSecurityScan()">
+                        <i class="fas fa-shield-alt"></i> Run Security Scan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Security Training -->
+            <div class="section">
+                <h2><i class="fas fa-graduation-cap"></i> Security Training</h2>
+                <div class="training-cards">
+                    <div class="training-card">
+                        <h3>Annual Security Certification</h3>
+                        <p>All users must complete annual security awareness training covering data handling, phishing prevention, and incident reporting.</p>
+                        <div class="training-status">
+                            <span class="status-badge completed">Completed</span>
+                            <span class="training-date">Last completed: March 1, 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="training-card">
+                        <h3>Forensic Ethics Training</h3>
+                        <p>Quarterly training on ethical considerations in digital forensics, bias recognition, and legal obligations.</p>
+                        <div class="training-status">
+                            <span class="status-badge pending">Due April 15</span>
+                            <span class="training-date">Next session: April 1, 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="training-card">
+                        <h3>Incident Response Drill</h3>
+                        <p>Bi-annual simulated security incident exercises to test response protocols and team coordination.</p>
+                        <div class="training-status">
+                            <span class="status-badge upcoming">Scheduled</span>
+                            <span class="training-date">Next drill: May 10, 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 ForensicRecon System. For authorized law enforcement use only.</p>
+                <div class="footer-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Connection Encrypted</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function generateAuditReport() {
+            alert("Generating comprehensive security audit report...");
+        }
+
+        function runSecurityScan() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert("Security scan completed. No vulnerabilities found.");
+            }, 3000);
+        }
+
+        // Security status indicators
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update security status in real-time
+            const securityStats = document.querySelectorAll('.security-stat');
+            securityStats.forEach(stat => {
+                stat.addEventListener('click', function() {
+                    const title = this.querySelector('h3').textContent;
+                    alert(`Detailed security information for: ${title}`);
+                });
+            });
+            
+            // Compliance status tooltips
+            const complianceCards = document.querySelectorAll('.compliance-card');
+            complianceCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const status = this.querySelector('.compliance-status span').textContent;
+                    const title = this.querySelector('h3').textContent;
+                    // In a real application, show detailed tooltip
+                });
+            });
+        });
+    </script>
+</body>
+</html>

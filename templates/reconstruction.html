@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analysis - ForensicRecon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-fingerprint"></i>
+                <span>Forensic<span class="highlight">Recon</span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/upload"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+                <li><a href="/evidence"><i class="fas fa-clipboard-list"></i> Evidence</a></li>
+                <li><a href="/reconstruction" class="active"><i class="fas fa-robot"></i> AI Analysis</a></li>
+                <li><a href="/visualization"><i class="fas fa-vr-cardboard"></i> Visualization</a></li>
+                <li><a href="/collaboration"><i class="fas fa-users"></i> Collaboration</a></li>
+                <li><a href="/security"><i class="fas fa-shield-alt"></i> Security</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Det. Sarah Miller</span>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="reconstruction">
+        <div class="container">
+            <div class="reconstruction-header">
+                <h1><i class="fas fa-robot"></i> AI-Assisted Analysis</h1>
+                <p class="section-subtitle">Advanced pattern recognition, trajectory calculation, and evidence correlation using machine learning algorithms</p>
+            </div>
+
+            <!-- Analysis Controls -->
+            <div class="analysis-controls">
+                <form method="POST" action="/reconstruction" class="analysis-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="case_id"><i class="fas fa-folder"></i> Select Case</label>
+                            <select id="case_id" name="case_id" required>
+                                <option value="">Select a case...</option>
+                                {% for case in cases %}
+                                <option value="{{ case.id }}">{{ case.id }} - {{ case.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="analysis_type"><i class="fas fa-cogs"></i> Analysis Type</label>
+                            <select id="analysis_type" name="analysis_type" required>
+                                <option value="">Select analysis type...</option>
+                                <option value="blood_pattern">Blood Pattern Analysis</option>
+                                <option value="fingerprint">Fingerprint Matching</option>
+                                <option value="bullet_trajectory">Bullet Trajectory</option>
+                                <option value="digital_footprint">Digital Footprint</option>
+                                <option value="facial_recognition">Facial Recognition</option>
+                                <option value="vehicle_analysis">Vehicle Identification</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="analysis_parameters"><i class="fas fa-sliders-h"></i> Analysis Parameters</label>
+                            <textarea id="analysis_parameters" name="analysis_parameters" rows="2" 
+                                      placeholder="Enter specific parameters or evidence IDs for analysis..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Run AI Analysis
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="runMockAnalysis()">
+                            <i class="fas fa-bolt"></i> Quick Test
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Analysis Results -->
+            <div class="section">
+                <h2><i class="fas fa-chart-line"></i> Analysis Results</h2>
+                {% if reconstruction_results %}
+                    {% for result in reconstruction_results %}
+                    <div class="analysis-result">
+                        <div class="result-header">
+                            <h3>{{ result.result.title }}</h3>
+                            <div class="result-meta">
+                                <span class="case-badge">{{ result.case_id }}</span>
+                                <span class="timestamp">{{ result.timestamp }}</span>
+                                <span class="confidence confidence-{{ 'high' if result.result.confidence > 80 else 'medium' if result.result.confidence > 60 else 'low' }}">
+                                    {{ result.result.confidence }}% Confidence
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="result-content">
+                            <div class="findings">
+                                <h4><i class="fas fa-search"></i> Key Findings</h4>
+                                <ul>
+                                    {% for finding in result.result.findings %}
+                                    <li>{{ finding }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            
+                            <div class="recommendations">
+                                <h4><i class="fas fa-lightbulb"></i> Recommendations</h4>
+                                <ul>
+                                    {% for rec in result.result.recommendations %}
+                                    <li>{{ rec }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="result-actions">
+                            <button class="btn btn-sm btn-outline" onclick="exportResult('{{ result.id }}')">
+                                <i class="fas fa-file-export"></i> Export Report
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="visualizeResult('{{ result.id }}')">
+                                <i class="fas fa-cube"></i> 3D Visualization
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="shareResult('{{ result.id }}')">
+                                <i class="fas fa-share-alt"></i> Share with Team
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results">
+                        <div class="no-results-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>No Analysis Results Yet</h3>
+                        <p>Run an AI analysis to see results here. You can select from various forensic analysis types including blood pattern analysis, fingerprint matching, bullet trajectory calculation, and more.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- AI Capabilities -->
+            <div class="section">
+                <h2><i class="fas fa-brain"></i> AI Analysis Capabilities</h2>
+                <div class="capabilities-grid">
+                    <div class="capability-card">
+                        <div class="capability-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Blood Pattern Analysis</h3>
+                            <p>Analyze blood spatter patterns to determine point of origin, impact velocity, and sequence of events.</p>
+                            <div class="capability-stats">
+                                <span><i class="fas fa-bullseye"></i> 94% Accuracy</span>
+                                <span><i class="fas fa-clock"></i> 2-5 min analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="capability-card">
+                        <div class="capability-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Fingerprint Matching</h3>
+                            <p>Compare latent prints against criminal databases with advanced minutiae detection algorithms.</p>
+                            <div class="capability-stats">
+                                <span><i class="fas fa-bullseye"></i> 99.7% Accuracy</span>
+                                <span><i class="fas fa-clock"></i> < 1 min analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="capability-card">
+                        <div class="capability-icon">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Ballistics Analysis</h3>
+                            <p>Reconstruct bullet trajectories, determine shooter position, and match firearms to evidence.</p>
+                            <div class="capability-stats">
+                                <span><i class="fas fa-bullseye"></i> 91% Accuracy</span>
+                                <span><i class="fas fa-clock"></i> 3-7 min analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="capability-card">
+                        <div class="capability-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Digital Forensics</h3>
+                            <p>Analyze digital footprints, recover deleted files, and trace online activities with AI assistance.</p>
+                            <div class="capability-stats">
+                                <span><i class="fas fa-bullseye"></i> 96% Accuracy</span>
+                                <span><i class="fas fa-clock"></i> 5-15 min analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Process Visualization -->
+            <div class="section">
+                <h2><i class="fas fa-project-diagram"></i> AI Analysis Process</h2>
+                <div class="ai-process">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Data Ingestion</h3>
+                            <p>Evidence is ingested and preprocessed for analysis. Metadata is extracted and standardized.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Pattern Recognition</h3>
+                            <p>AI algorithms identify patterns, anomalies, and correlations across multiple evidence sources.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Hypothesis Generation</h3>
+                            <p>Multiple scenarios are generated based on evidence patterns and forensic principles.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Probability Scoring</h3>
+                            <p>Each hypothesis is scored for probability based on evidence alignment and statistical models.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Report Generation</h3>
+                            <p>Comprehensive reports with findings, confidence scores, and investigative recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 ForensicRecon System. For authorized law enforcement use only.</p>
+                <div class="footer-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Connection Encrypted</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function runMockAnalysis() {
+            alert("Running mock AI analysis with test data. This simulates the AI analysis process.");
+            // In a real application, this would trigger an API call to run analysis
+        }
+
+        function exportResult(resultId) {
+            alert(`Exporting analysis result ${resultId} as PDF report`);
+            // In a real application, this would generate and download a PDF
+        }
+
+        function visualizeResult(resultId) {
+            alert(`Opening 3D visualization for analysis ${resultId}`);
+            window.location.href = `/visualization?analysis=${resultId}`;
+        }
+
+        function shareResult(resultId) {
+            alert(`Sharing analysis ${resultId} with investigation team`);
+            // In a real application, this would open a sharing dialog
+        }
+
+        // Simulate real-time AI processing animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const analysisForm = document.querySelector('.analysis-form');
+            if (analysisForm) {
+                analysisForm.addEventListener('submit', function() {
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    submitBtn.disabled = true;
+                    
+                    // Simulate processing delay
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

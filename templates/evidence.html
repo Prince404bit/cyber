@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence Management - ForensicRecon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-fingerprint"></i>
+                <span>Forensic<span class="highlight">Recon</span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/upload"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+                <li><a href="/evidence" class="active"><i class="fas fa-clipboard-list"></i> Evidence</a></li>
+                <li><a href="/reconstruction"><i class="fas fa-robot"></i> AI Analysis</a></li>
+                <li><a href="/visualization"><i class="fas fa-vr-cardboard"></i> Visualization</a></li>
+                <li><a href="/collaboration"><i class="fas fa-users"></i> Collaboration</a></li>
+                <li><a href="/security"><i class="fas fa-shield-alt"></i> Security</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Det. Sarah Miller</span>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="evidence">
+        <div class="container">
+            <div class="evidence-header">
+                <h1><i class="fas fa-clipboard-list"></i> Evidence Management</h1>
+                <p class="section-subtitle">Manage, review, and analyze digital evidence with chain of custody tracking</p>
+            </div>
+
+            <!-- Evidence Filters -->
+            <div class="evidence-filters">
+                <div class="filter-group">
+                    <label for="caseFilter"><i class="fas fa-filter"></i> Filter by Case</label>
+                    <select id="caseFilter" class="filter-select">
+                        <option value="">All Cases</option>
+                        {% for case in cases %}
+                        <option value="{{ case.id }}">{{ case.id }} - {{ case.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="typeFilter"><i class="fas fa-tag"></i> Filter by Type</label>
+                    <select id="typeFilter" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="Image">Images</option>
+                        <option value="Video">Videos</option>
+                        <option value="Document">Documents</option>
+                        <option value="Audio">Audio</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter"><i class="fas fa-check-circle"></i> Filter by Status</label>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="Uploaded">Uploaded</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Analyzed">Analyzed</option>
+                        <option value="Verified">Verified</option>
+                    </select>
+                </div>
+                <button class="btn btn-outline" id="resetFilters">
+                    <i class="fas fa-redo"></i> Reset Filters
+                </button>
+            </div>
+
+            <!-- Evidence List -->
+            <div class="evidence-list">
+                {% for evidence in evidence_items %}
+                <div class="evidence-card" data-case="{{ evidence.case_id }}" data-type="{{ evidence.type }}" data-status="{{ evidence.status }}">
+                    <div class="evidence-header">
+                        <div class="evidence-id">
+                            <span class="evidence-badge">{{ evidence.id }}</span>
+                            <span class="evidence-type type-{{ evidence.type|lower }}">
+                                <i class="fas fa-{% if evidence.type == 'Image' %}image{% elif evidence.type == 'Video' %}video{% elif evidence.type == 'Document' %}file-alt{% else %}file{% endif %}"></i>
+                                {{ evidence.type }}
+                            </span>
+                        </div>
+                        <div class="evidence-status status-{{ evidence.status|lower }}">
+                            <i class="fas fa-circle"></i> {{ evidence.status }}
+                        </div>
+                    </div>
+                    
+                    <div class="evidence-content">
+                        <h3 class="evidence-title">{{ evidence.name }}</h3>
+                        <div class="evidence-details">
+                            <p><i class="fas fa-folder"></i> Case: {{ evidence.case_id }}</p>
+                            <p><i class="fas fa-calendar"></i> Collected: {{ evidence.date_collected }}</p>
+                            <p><i class="fas fa-user-shield"></i> By: {{ evidence.collected_by }}</p>
+                        </div>
+                        <div class="evidence-notes">
+                            <p><strong>Notes:</strong> {{ evidence.notes }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="evidence-actions">
+                        <button class="btn btn-sm btn-outline" onclick="viewEvidence('{{ evidence.id }}')">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                        <button class="btn btn-sm btn-primary" onclick="analyzeEvidence('{{ evidence.id }}')">
+                            <i class="fas fa-robot"></i> Analyze
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="downloadEvidence('{{ evidence.id }}')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Chain of Custody -->
+            <div class="section">
+                <h2><i class="fas fa-link"></i> Chain of Custody</h2>
+                <div class="custody-timeline">
+                    <div class="custody-step">
+                        <div class="custody-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="custody-content">
+                            <h3>Evidence Collection</h3>
+                            <p>Collected at crime scene with proper documentation</p>
+                            <span class="custody-time">Initial Collection</span>
+                        </div>
+                    </div>
+                    <div class="custody-step">
+                        <div class="custody-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="custody-content">
+                            <h3>Digital Upload</h3>
+                            <p>Digitized and uploaded to secure system</p>
+                            <span class="custody-time">System Entry</span>
+                        </div>
+                    </div>
+                    <div class="custody-step">
+                        <div class="custody-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="custody-content">
+                            <h3>AI Analysis</h3>
+                            <p>Processed through forensic analysis algorithms</p>
+                            <span class="custody-time">Analysis Phase</span>
+                        </div>
+                    </div>
+                    <div class="custody-step">
+                        <div class="custody-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="custody-content">
+                            <h3>Verification</h3>
+                            <p>Reviewed and verified by lead investigator</p>
+                            <span class="custody-time">Verification Complete</span>
+                        </div>
+                    </div>
+                    <div class="custody-step">
+                        <div class="custody-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="custody-content">
+                            <h3>Court Submission</h3>
+                            <p>Prepared for legal proceedings</p>
+                            <span class="custody-time">Ready for Court</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evidence Statistics -->
+            <div class="section">
+                <h2><i class="fas fa-chart-bar"></i> Evidence Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Evidence Items</h3>
+                        <p class="stat-number">{{ evidence_items|length }}</p>
+                        <div class="stat-breakdown">
+                            <span><i class="fas fa-image"></i> Images: 8</span>
+                            <span><i class="fas fa-video"></i> Videos: 5</span>
+                            <span><i class="fas fa-file-alt"></i> Documents: 10</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Analysis Status</h3>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <p>75% Evidence Analyzed</p>
+                        </div>
+                        <div class="stat-details">
+                            <p><i class="fas fa-check-circle"></i> Analyzed: 15 items</p>
+                            <p><i class="fas fa-clock"></i> Pending: 5 items</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Chain of Custody</h3>
+                        <p class="stat-number">100%</p>
+                        <p>Complete audit trail maintained</p>
+                        <div class="stat-security">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>No integrity violations detected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 ForensicRecon System. For authorized law enforcement use only.</p>
+                <div class="footer-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Connection Encrypted</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function viewEvidence(evidenceId) {
+            alert(`Viewing evidence: ${evidenceId}`);
+            // In a real application, this would open a modal or redirect to evidence detail page
+        }
+
+        function analyzeEvidence(evidenceId) {
+            alert(`Initiating AI analysis for: ${evidenceId}`);
+            window.location.href = `/reconstruction?evidence=${evidenceId}`;
+        }
+
+        function downloadEvidence(evidenceId) {
+            alert(`Downloading evidence: ${evidenceId}`);
+            // In a real application, this would trigger file download
+        }
+
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const caseFilter = document.getElementById('caseFilter');
+            const typeFilter = document.getElementById('typeFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const resetBtn = document.getElementById('resetFilters');
+            const evidenceCards = document.querySelectorAll('.evidence-card');
+
+            function filterEvidence() {
+                const caseValue = caseFilter.value;
+                const typeValue = typeFilter.value;
+                const statusValue = statusFilter.value;
+
+                evidenceCards.forEach(card => {
+                    const cardCase = card.getAttribute('data-case');
+                    const cardType = card.getAttribute('data-type');
+                    const cardStatus = card.getAttribute('data-status');
+
+                    const caseMatch = !caseValue || cardCase === caseValue;
+                    const typeMatch = !typeValue || cardType === typeValue;
+                    const statusMatch = !statusValue || cardStatus === statusValue;
+
+                    if (caseMatch && typeMatch && statusMatch) {
+                        card.style.display = 'block';
+                        setTimeout(() => card.style.opacity = '1', 10);
+                    } else {
+                        card.style.opacity = '0';
+                        setTimeout(() => card.style.display = 'none', 300);
+                    }
+                });
+            }
+
+            caseFilter.addEventListener('change', filterEvidence);
+            typeFilter.addEventListener('change', filterEvidence);
+            statusFilter.addEventListener('change', filterEvidence);
+
+            resetBtn.addEventListener('click', function() {
+                caseFilter.value = '';
+                typeFilter.value = '';
+                statusFilter.value = '';
+                filterEvidence();
+            });
+        });
+    </script>
+</body>
+</html>

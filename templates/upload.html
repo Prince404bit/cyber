@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Case - ForensicRecon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-fingerprint"></i>
+                <span>Forensic<span class="highlight">Recon</span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/upload" class="active"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+                <li><a href="/evidence"><i class="fas fa-clipboard-list"></i> Evidence</a></li>
+                <li><a href="/reconstruction"><i class="fas fa-robot"></i> AI Analysis</a></li>
+                <li><a href="/visualization"><i class="fas fa-vr-cardboard"></i> Visualization</a></li>
+                <li><a href="/collaboration"><i class="fas fa-users"></i> Collaboration</a></li>
+                <li><a href="/security"><i class="fas fa-shield-alt"></i> Security</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Det. Sarah Miller</span>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="upload">
+        <div class="container">
+            <div class="upload-header">
+                <h1><i class="fas fa-cloud-upload-alt"></i> Case & Evidence Upload</h1>
+                <p class="section-subtitle">Upload new case information and digital evidence with secure chain of custody tracking</p>
+            </div>
+
+            <div class="upload-container">
+                <!-- New Case Form -->
+                <div class="upload-section">
+                    <h2><i class="fas fa-folder-plus"></i> Create New Case</h2>
+                    <form method="POST" action="/upload" class="upload-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="case_title"><i class="fas fa-heading"></i> Case Title</label>
+                                <input type="text" id="case_title" name="case_title" required 
+                                       placeholder="e.g., Bank Robbery - Downtown Branch">
+                            </div>
+                            <div class="form-group">
+                                <label for="case_date"><i class="fas fa-calendar"></i> Incident Date</label>
+                                <input type="date" id="case_date" name="case_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="case_location"><i class="fas fa-map-marker-alt"></i> Location</label>
+                                <input type="text" id="case_location" name="case_location" 
+                                       placeholder="e.g., 123 Main Street, Downtown">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="case_description"><i class="fas fa-file-alt"></i> Case Description</label>
+                                <textarea id="case_description" name="case_description" rows="3" 
+                                          placeholder="Provide detailed description of the incident..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Case
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Evidence Upload -->
+                <div class="upload-section">
+                    <h2><i class="fas fa-microscope"></i> Upload Evidence</h2>
+                    <form method="POST" action="/upload" enctype="multipart/form-data" class="upload-form">
+                        <div class="form-group">
+                            <label for="case_select"><i class="fas fa-folder"></i> Select Case</label>
+                            <select id="case_select" name="case_id">
+                                <option value="">Select a case...</option>
+                                {% for case in cases %}
+                                <option value="{{ case.id }}">{{ case.id }} - {{ case.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="evidence_files"><i class="fas fa-file-upload"></i> Evidence Files</label>
+                            <div class="file-upload-area" id="dropArea">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <p>Drag & drop evidence files here or click to browse</p>
+                                <p class="upload-hint">Supported: Images, Videos, Documents (Max 50MB each)</p>
+                                <input type="file" id="evidence_files" name="evidence_files" 
+                                       multiple accept=".png,.jpg,.jpeg,.gif,.mp4,.mov,.avi,.pdf,.txt,.doc,.docx">
+                            </div>
+                            <div id="fileList" class="file-list"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="evidence_notes"><i class="fas fa-sticky-note"></i> Evidence Notes</label>
+                            <textarea id="evidence_notes" name="evidence_notes" rows="3" 
+                                      placeholder="Add notes about the evidence, collection details, chain of custody..."></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Evidence
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Upload Guidelines -->
+                <div class="upload-section guidelines">
+                    <h2><i class="fas fa-clipboard-check"></i> Upload Guidelines</h2>
+                    <div class="guidelines-list">
+                        <div class="guideline">
+                            <div class="guideline-icon">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div class="guideline-content">
+                                <h3>Photographic Evidence</h3>
+                                <p>Upload high-resolution images with scale references. Include multiple angles of each piece of evidence.</p>
+                            </div>
+                        </div>
+                        <div class="guideline">
+                            <div class="guideline-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="guideline-content">
+                                <h3>Video Evidence</h3>
+                                <p>Include original video files with timestamps. CCTV footage should have metadata intact.</p>
+                            </div>
+                        </div>
+                        <div class="guideline">
+                            <div class="guideline-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="guideline-content">
+                                <h3>Documentation</h3>
+                                <p>Scan all documents at 300 DPI minimum. Include chain of custody forms and officer notes.</p>
+                            </div>
+                        </div>
+                        <div class="guideline">
+                            <div class="guideline-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="guideline-content">
+                                <h3>Security Protocols</h3>
+                                <p>All uploads are encrypted end-to-end. Maintain original file integrity and metadata.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 ForensicRecon System. For authorized law enforcement use only.</p>
+                <div class="footer-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Connection Encrypted</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
